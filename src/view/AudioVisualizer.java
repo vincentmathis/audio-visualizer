@@ -12,20 +12,28 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
+
 
 public class AudioVisualizer extends Application implements AudioSpectrumListener {
 
     private static MediaPlayer audioPlayer;
     // TODO get URI of mp3
     //private static final String AUDIO_URI = new File("mpthreetest.mp3").toURI().toString();
-    private static final String AUDIO_URI = System.getProperty("demo.audio.url","http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv");
-    private static final int WIDTH = 400;
-    private static final int HEIGHT = 300;
+    private final String AUDIO_URI = System.getProperty("demo.audio.url","http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv");
+    private final int WIDTH = 400;
+    private final int HEIGHT = 300;
+    private final int BANDS = 128;
     private GraphicsContext gc;
+    private float[] buffer = new float[BANDS];
 
     public AudioVisualizer() {
         Media media = new Media(AUDIO_URI);
         audioPlayer = new MediaPlayer(media);
+        audioPlayer.setAudioSpectrumListener(this);
+        audioPlayer.setAudioSpectrumInterval(0.02);
+        audioPlayer.setAudioSpectrumNumBands(BANDS);
+        audioPlayer.setCycleCount(Timeline.INDEFINITE);
 	}
 
     public static void main(String[] args) {
@@ -34,10 +42,7 @@ public class AudioVisualizer extends Application implements AudioSpectrumListene
 
     @Override
     public void start(Stage stage) throws Exception {
-        audioPlayer.setAudioSpectrumListener(this);
-        audioPlayer.setAudioSpectrumInterval(0.02);
-        audioPlayer.setAudioSpectrumNumBands(128);
-        audioPlayer.setCycleCount(Timeline.INDEFINITE);
+
         audioPlayer.play();
 
         Group root = new Group();
@@ -52,11 +57,14 @@ public class AudioVisualizer extends Application implements AudioSpectrumListene
 
     @Override
     public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
-        float[] corrected = new float[magnitudes.length];
         for (int i = 0; i < magnitudes.length; i++) {
-            corrected[i] = magnitudes[i] - audioPlayer.getAudioSpectrumThreshold();
+            if(magnitudes[i] - audioPlayer.getAudioSpectrumThreshold() >= buffer[i]) {
+                buffer[i] = magnitudes[i] - audioPlayer.getAudioSpectrumThreshold();
+            } else {
+                buffer[i] -= 0.25;
+            }
         }
-        drawShapes(gc, corrected);
+        drawShapes(gc, buffer);
     }
 
     private void drawShapes(GraphicsContext gc, float[] mags) {
