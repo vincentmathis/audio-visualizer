@@ -3,6 +3,7 @@ package view;
 
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.AudioSpectrumListener;
@@ -16,7 +17,9 @@ public class AudioVisualizer extends Application implements AudioSpectrumListene
 
     private static MediaPlayer audioPlayer;
     // TODO get URI of mp3
-    private static final String AUDIO_URI = new File("mpthreetest.mp3").toURI().toString();
+    //private static final String AUDIO_URI = new File("mpthreetest.mp3").toURI().toString();
+    private static final String AUDIO_URI = System.getProperty("demo.audio.url","http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv");
+
 
     public AudioVisualizer() {
         Media media = new Media(AUDIO_URI);
@@ -30,10 +33,10 @@ public class AudioVisualizer extends Application implements AudioSpectrumListene
     @Override
     public void start(Stage stage) throws Exception {
         audioPlayer.setAudioSpectrumListener(this);
-        audioPlayer.play();
         audioPlayer.setAudioSpectrumInterval(0.02);
         audioPlayer.setAudioSpectrumNumBands(128);
         audioPlayer.setCycleCount(Timeline.INDEFINITE);
+        audioPlayer.play();
 
         BorderPane pane = new BorderPane();
         Scene scene = new Scene(pane, 400, 300);
@@ -43,10 +46,13 @@ public class AudioVisualizer extends Application implements AudioSpectrumListene
         stage.show();
     }
 
+
     @Override
     public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
-        for (float magnitude : magnitudes) {
-            System.out.println(magnitude);
-        }
+        Platform.runLater(() -> {
+            for (float magnitude : magnitudes) {
+                System.out.println(magnitude);
+            }
+        });
     }
 }
