@@ -6,35 +6,27 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.Arrays;
 
 
 public class AudioVisualizer extends Application implements AudioSpectrumListener {
 
     private static MediaPlayer audioPlayer;
-    // TODO get URI of mp3
-    //private static final String AUDIO_URI = new File("mpthreetest.mp3").toURI().toString();
-    private final String AUDIO_URI = System.getProperty("demo.audio.url","http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv");
     private final int WIDTH = 400;
     private final int HEIGHT = 300;
     private final int BANDS = 128;
-    private GraphicsContext gc;
     private float[] buffer = new float[BANDS];
-
-    public AudioVisualizer() {
-        Media media = new Media(AUDIO_URI);
-        audioPlayer = new MediaPlayer(media);
-        audioPlayer.setAudioSpectrumListener(this);
-        audioPlayer.setAudioSpectrumInterval(0.02);
-        audioPlayer.setAudioSpectrumNumBands(BANDS);
-        audioPlayer.setCycleCount(Timeline.INDEFINITE);
-	}
+    private GraphicsContext gc;
 
     public static void main(String[] args) {
         launch(args);
@@ -42,16 +34,37 @@ public class AudioVisualizer extends Application implements AudioSpectrumListene
 
     @Override
     public void start(Stage stage) throws Exception {
+        Button openFile = new Button("Open");
+        openFile.setOnAction(event -> openFile(stage));
 
-        audioPlayer.play();
-
-        Group root = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         gc = canvas.getGraphicsContext2D();
-        root.getChildren().add(canvas);
-        stage.setScene(new Scene(root));
+
+        BorderPane pane = new BorderPane();
+        pane.setBottom(openFile);
+        pane.setCenter(canvas);
+
+        stage.setScene(new Scene(pane));
         stage.setTitle("Audio Visualizer");
         stage.show();
+    }
+
+    private void openFile(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Audio File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            String audioURI = selectedFile.toURI().toString();
+            Media media = new Media(audioURI);
+            audioPlayer = new MediaPlayer(media);
+            audioPlayer.setAudioSpectrumListener(this);
+            audioPlayer.setAudioSpectrumInterval(0.02);
+            audioPlayer.setAudioSpectrumNumBands(BANDS);
+            audioPlayer.setCycleCount(Timeline.INDEFINITE);
+            audioPlayer.play();
+        }
     }
 
 
