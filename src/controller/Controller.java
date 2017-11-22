@@ -1,8 +1,10 @@
 package controller;
 
 import javafx.animation.Timeline;
-import javafx.fxml.FXML;import javafx.scene.canvas.Canvas;
+import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -21,12 +23,18 @@ public class Controller implements AudioSpectrumListener {
     @FXML
     private Canvas canvas;
     private GraphicsContext gc;
+
+    @FXML
+    AnchorPane canvasPane;
     private Stage stage;
     private File lastFile;
 
     @FXML
     public void initialize() {
         gc = canvas.getGraphicsContext2D();
+        // TODO scaling
+        canvas.widthProperty().bind(canvasPane.widthProperty());
+        canvas.heightProperty().bind(canvasPane.heightProperty());
     }
 
     @FXML

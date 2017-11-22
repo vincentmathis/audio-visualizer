@@ -1,3 +1,16 @@
+/*
+colors:
+darker:         #22252b
+dark:           #292c33
+blueish grays:  #7d8598, 93a1bb, c4d6fe
+green:          #87b477
+purple:         #b37ccf
+red:            #be6b79
+orange:         #d59a63
+yellow:         #e3c18a
+blue:           #3973ee
+*/
+
 .button {
     -fx-background-color: transparent;
     -fx-text-fill: #93a1bb;
