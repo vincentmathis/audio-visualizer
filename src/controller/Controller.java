@@ -17,15 +17,13 @@ import java.io.File;
 public class Controller implements AudioSpectrumListener {
 
     private final int BANDS = 256;
+    @FXML
+    AnchorPane canvasPane;
     private float[] buffer = new float[BANDS];
     private MediaPlayer audioPlayer;
-
     @FXML
     private Canvas canvas;
     private GraphicsContext gc;
-
-    @FXML
-    AnchorPane canvasPane;
     private Stage stage;
     private File lastFile;
 
@@ -41,15 +39,15 @@ public class Controller implements AudioSpectrumListener {
     void openFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Audio File");
-        if(lastFile != null){
+        if (lastFile != null) {
             fileChooser.setInitialDirectory(new File(lastFile.getParent()));
         }
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
-            if(audioPlayer != null) {
-                if(audioPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+            if (audioPlayer != null) {
+                if (audioPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
                     audioPlayer.stop();
                 }
             }
@@ -69,7 +67,7 @@ public class Controller implements AudioSpectrumListener {
     @Override
     public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
         for (int i = 0; i < magnitudes.length; i++) {
-            if(magnitudes[i] - audioPlayer.getAudioSpectrumThreshold() >= buffer[i]) {
+            if (magnitudes[i] - audioPlayer.getAudioSpectrumThreshold() >= buffer[i]) {
                 buffer[i] = magnitudes[i] - audioPlayer.getAudioSpectrumThreshold();
             } else {
                 buffer[i] -= 0.25;
@@ -81,11 +79,11 @@ public class Controller implements AudioSpectrumListener {
     private void drawShapes() {
         double width = canvas.getWidth();
         double height = canvas.getHeight();
-        gc.clearRect(0,0, width, height);
+        gc.clearRect(0, 0, width, height);
         gc.setFill(Color.web("#d59a63"));
         double barWidth = width / buffer.length;
         for (int i = 0; i < buffer.length; i++) {
-            gc.fillRect(i*barWidth, height / 2 - buffer[i]*3, barWidth, buffer[i]*3*2);
+            gc.fillRect(i * barWidth, height / 2 - buffer[i] * 3, barWidth, buffer[i] * 3 * 2);
         }
     }
 
