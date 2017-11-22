@@ -48,6 +48,11 @@ public class Controller implements AudioSpectrumListener {
                 new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
+            if(audioPlayer != null) {
+                if(audioPlayer.getStatus().equals(MediaPlayer.Status.PLAYING)) {
+                    audioPlayer.stop();
+                }
+            }
             lastFile = selectedFile;
             String audioURI = selectedFile.toURI().toString();
             Media media = new Media(audioURI);
