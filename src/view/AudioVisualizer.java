@@ -21,12 +21,13 @@ import java.util.Arrays;
 
 public class AudioVisualizer extends Application implements AudioSpectrumListener {
 
-    private static MediaPlayer audioPlayer;
     private final int WIDTH = 400;
     private final int HEIGHT = 300;
     private final int BANDS = 128;
     private float[] buffer = new float[BANDS];
+    private static MediaPlayer audioPlayer;
     private GraphicsContext gc;
+    private File lastFile;
 
     public static void main(String[] args) {
         launch(args);
@@ -52,10 +53,14 @@ public class AudioVisualizer extends Application implements AudioSpectrumListene
     private void openFile(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Audio File");
+        if(lastFile != null){
+            fileChooser.setInitialDirectory(new File(lastFile.getParent()));
+        }
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"));
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
+            lastFile = selectedFile;
             String audioURI = selectedFile.toURI().toString();
             Media media = new Media(audioURI);
             audioPlayer = new MediaPlayer(media);
