@@ -11,28 +11,29 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import view.DrawCanvas;
 
 import java.io.File;
 
-public class Controller implements AudioSpectrumListener {
+public class Controller {
 
-    private final int BANDS = 256;
+    public static final int BANDS = 256;
     @FXML
     AnchorPane canvasPane;
-    private float[] buffer = new float[BANDS];
+
     private MediaPlayer audioPlayer;
     @FXML
-    private Canvas canvas;
+    private DrawCanvas drawCanvas;
     private GraphicsContext gc;
     private Stage stage;
     private File lastFile;
 
     @FXML
     public void initialize() {
-        gc = canvas.getGraphicsContext2D();
+        drawCanvas = new DrawCanvas();
         // TODO scaling
-        canvas.widthProperty().bind(canvasPane.widthProperty());
-        canvas.heightProperty().bind(canvasPane.heightProperty());
+//        drawCanvas.widthProperty().bind(drawCanvasPane.widthProperty());
+//        drawCanvas.heightProperty().bind(drawCanvasPane.heightProperty());
     }
 
     @FXML
@@ -55,35 +56,12 @@ public class Controller implements AudioSpectrumListener {
             String audioURI = selectedFile.toURI().toString();
             Media media = new Media(audioURI);
             audioPlayer = new MediaPlayer(media);
-            audioPlayer.setAudioSpectrumListener(this);
+            audioPlayer.setAudioSpectrumListener(drawCanvas);
             audioPlayer.setAudioSpectrumInterval(0.02);
             audioPlayer.setAudioSpectrumNumBands(BANDS);
             audioPlayer.setCycleCount(Timeline.INDEFINITE);
+            drawCanvas.setAudioPlayer(audioPlayer);
             audioPlayer.play();
-        }
-    }
-
-
-    @Override
-    public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
-        for (int i = 0; i < magnitudes.length; i++) {
-            if (magnitudes[i] - audioPlayer.getAudioSpectrumThreshold() >= buffer[i]) {
-                buffer[i] = magnitudes[i] - audioPlayer.getAudioSpectrumThreshold();
-            } else {
-                buffer[i] -= 0.25;
-            }
-        }
-        drawShapes();
-    }
-
-    private void drawShapes() {
-        double width = canvas.getWidth();
-        double height = canvas.getHeight();
-        gc.clearRect(0, 0, width, height);
-        gc.setFill(Color.web("#d59a63"));
-        double barWidth = width / buffer.length;
-        for (int i = 0; i < buffer.length; i++) {
-            gc.fillRect(i * barWidth, height / 2 - buffer[i] * 3, barWidth, buffer[i] * 3 * 2);
         }
     }
 
