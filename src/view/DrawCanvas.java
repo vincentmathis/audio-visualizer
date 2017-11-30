@@ -3,7 +3,6 @@ package view;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import model.MP3Player;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -12,10 +11,10 @@ public class DrawCanvas implements Observer {
 
     private Canvas canvas;
     private GraphicsContext gc;
-    private MP3Player player;
 
-    public DrawCanvas(MP3Player player) {
-        this.player = player;
+
+    public DrawCanvas() {
+
     }
 
     private void drawShapes(float bands[]) {
@@ -25,7 +24,8 @@ public class DrawCanvas implements Observer {
         gc.setFill(Color.web("#d59a63"));
         double barWidth = width / bands.length;
         for (int i = 0; i < bands.length; i++) {
-            gc.fillRect(i * barWidth, height / 2 - bands[i] * 3, barWidth, bands[i] * 3 * 2);
+            int SCALING = 20;
+            gc.fillRect(i * barWidth, height / 2 - bands[i] * SCALING, barWidth, bands[i] * SCALING * 2);
         }
     }
 

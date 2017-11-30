@@ -25,4 +25,7 @@ public class AudioVisualizer extends Application {
         stage.setTitle("Audio Visualizer");
         stage.show();
     }
+
+    // TODO stop playing on close
+
 }

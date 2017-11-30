@@ -13,14 +13,15 @@ public class Controller {
 
     private Stage stage;
     private File lastFile;
-    private MP3Player player;
-    private DrawCanvas drawCanvas;
+    private final MP3Player player;
+    private final DrawCanvas drawCanvas;
     @FXML
     private Canvas canvas;
 
     public Controller() {
         this.player = new MP3Player();
-        this.drawCanvas = new DrawCanvas(player);
+        this.drawCanvas = new DrawCanvas();
+        this.player.addObserver(drawCanvas);
     }
 
     @FXML
