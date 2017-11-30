@@ -1,48 +1,43 @@
 package view;
 
-import controller.Controller;
-import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.media.AudioSpectrumListener;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import model.MP3Player;
 
-public class DrawCanvas implements AudioSpectrumListener {
+import java.util.Observable;
+import java.util.Observer;
 
-    @FXML
+public class DrawCanvas implements Observer {
+
     private Canvas canvas;
     private GraphicsContext gc;
-    private float[] buffer = new float[Controller.BANDS];
-    private MediaPlayer audioPlayer;
+    private MP3Player player;
 
-    public DrawCanvas() {
-        this.gc = canvas.getGraphicsContext2D();
+    public DrawCanvas(MP3Player player) {
+        this.player = player;
     }
 
-    @Override
-    public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
-        for (int i = 0; i < magnitudes.length; i++) {
-            if (magnitudes[i] - audioPlayer.getAudioSpectrumThreshold() >= buffer[i]) {
-                buffer[i] = magnitudes[i] - audioPlayer.getAudioSpectrumThreshold();
-            } else {
-                buffer[i] -= 0.25;
-            }
-        }
-        drawShapes();
-    }
-    private void drawShapes() {
+    private void drawShapes(float bands[]) {
         double width = canvas.getWidth();
         double height = canvas.getHeight();
         gc.clearRect(0, 0, width, height);
         gc.setFill(Color.web("#d59a63"));
-        double barWidth = width / buffer.length;
-        for (int i = 0; i < buffer.length; i++) {
-            gc.fillRect(i * barWidth, height / 2 - buffer[i] * 3, barWidth, buffer[i] * 3 * 2);
+        double barWidth = width / bands.length;
+        for (int i = 0; i < bands.length; i++) {
+            gc.fillRect(i * barWidth, height / 2 - bands[i] * 3, barWidth, bands[i] * 3 * 2);
         }
     }
 
-    public void setAudioPlayer(MediaPlayer audioPlayer) {
-        this.audioPlayer = audioPlayer;
+    @Override
+    public void update(Observable observable, Object o) {
+        if (o instanceof float[]) {
+            drawShapes((float[]) o);
+        }
+    }
+
+    public void setCanvas(Canvas canvas) {
+        this.canvas = canvas;
+        this.gc = canvas.getGraphicsContext2D();
     }
 }
