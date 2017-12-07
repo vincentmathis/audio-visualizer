@@ -20,6 +20,7 @@ public class DrawCanvas implements Observer {
 
         double width = canvas.getWidth();
         double height = canvas.getHeight();
+        // TODO doesn't clear after using step slider
         gc.clearRect(0, 0, width, height);
         gc.setFill(Color.web("#d59a63"));
         double barWidth = width / bands.length;

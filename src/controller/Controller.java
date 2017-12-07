@@ -28,7 +28,8 @@ public class Controller implements Observer {
     private Slider spacingSlider;
     @FXML
     private Slider seekSlider;
-    @FXML private AnchorPane canvasPane;
+    @FXML
+    private AnchorPane canvasPane;
     private long lastPressed;
 
 
@@ -46,7 +47,8 @@ public class Controller implements Observer {
         canvas.heightProperty().bind(canvasPane.heightProperty());
         drawCanvas.setCanvas(canvas);
         spacingSlider.valueProperty().addListener((observable, oldValue, newValue) -> player.setSteps(newValue.intValue()));
-        seekSlider.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> lastPressed = System.currentTimeMillis());
+
+        seekSlider.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> lastPressed = System.currentTimeMillis());
         seekSlider.valueProperty().addListener(observable -> {
             if(seekSlider.isValueChanging() || (System.currentTimeMillis() - lastPressed) < 200) {
                 player.setPosition(seekSlider.getValue());
@@ -72,7 +74,7 @@ public class Controller implements Observer {
 
     @Override
     public void update(java.util.Observable o, Object arg) {
-        if(arg instanceof Double){
+        if (arg instanceof Double) {
             seekSlider.setValue((double) arg);
         }
     }
