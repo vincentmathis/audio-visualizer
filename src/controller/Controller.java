@@ -1,11 +1,13 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.MP3Player;
@@ -17,7 +19,7 @@ import java.util.Observer;
 public class Controller implements Observer {
 
     private final MP3Player player;
-    private final DrawCanvas drawCanvas;
+    private DrawCanvas drawCanvas;
     private Stage stage;
     private File lastFile;
     @FXML
@@ -27,31 +29,31 @@ public class Controller implements Observer {
     @FXML
     private Slider spacingSlider;
     @FXML
-    private Slider seekSlider;
+    private ProgressBar progressBar;
     @FXML
-    private AnchorPane canvasPane;
-    private long lastPressed;
+    private Pane canvasPane;
 
 
     public Controller() {
         this.player = new MP3Player();
-        this.drawCanvas = new DrawCanvas();
-        this.player.addObserver(drawCanvas);
-        this.player.addObserver(this);
     }
 
     @FXML
     public void initialize() {
+        this.drawCanvas = new DrawCanvas(canvas);
+        this.player.addObserver(drawCanvas);
+        this.player.addObserver(this);
         // TODO only scales one direction
         canvas.widthProperty().bind(canvasPane.widthProperty());
         canvas.heightProperty().bind(canvasPane.heightProperty());
-        drawCanvas.setCanvas(canvas);
         spacingSlider.valueProperty().addListener((observable, oldValue, newValue) -> player.setSteps(newValue.intValue()));
 
-        seekSlider.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> lastPressed = System.currentTimeMillis());
-        seekSlider.valueProperty().addListener(observable -> {
-            if(seekSlider.isValueChanging() || (System.currentTimeMillis() - lastPressed) < 200) {
-                player.setPosition(seekSlider.getValue());
+        progressBar.setOnMouseClicked(event -> {
+            if(event.getButton() == MouseButton.PRIMARY) {
+                Bounds bounds = progressBar.getLayoutBounds();
+                double mouseX = event.getX();
+                double percent = (mouseX) / (bounds.getMaxX() - bounds.getMinX());
+                player.setPosition(percent);
             }
         });
     }
@@ -75,7 +77,7 @@ public class Controller implements Observer {
     @Override
     public void update(java.util.Observable o, Object arg) {
         if (arg instanceof Double) {
-            seekSlider.setValue((double) arg);
+            progressBar.setProgress((double) arg);
         }
     }
 

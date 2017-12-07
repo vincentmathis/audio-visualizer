@@ -21,6 +21,8 @@ public class AudioVisualizer extends Application {
         Controller controller = loader.getController();
         controller.setStage(stage);
         root.getStylesheets().add("styles/style.css");
+        stage.setMinWidth(640);
+        stage.setMinHeight(360);
         stage.setScene(new Scene(root));
         stage.setTitle("Audio Visualizer");
         stage.show();

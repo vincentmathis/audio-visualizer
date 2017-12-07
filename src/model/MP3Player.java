@@ -66,11 +66,7 @@ public class MP3Player extends Observable {
     }
 
     public void setSteps(int steps) {
-        if(steps == 0) {
-            this.steps = 1;
-        } else {
-            this.steps = steps;
-        }
+        this.steps = steps;
     }
 
     public void setPosition(double percent) {

@@ -24,6 +24,14 @@ blue:           #3973ee
     -fx-border-color:  #c4d6fe;
 }
 
+.border-pane {
+    -fx-background-color: #292c33
+}
+
+.bottom-pane {
+    -fx-background-color: #22252b
+}
+
 .slider {
     -jfx-default-thumb: #93a1bb;
     -jfx-default-track: #CCCCCC;
@@ -129,4 +137,26 @@ blue:           #3973ee
     -fx-border-width: 0;
     -fx-max-width: 10;
     -fx-max-height: 10;
+}
+
+
+.progress-bar > .track{
+    -fx-background-color: #7d8598;
+}
+
+.progress-bar > .bar,
+.progress-bar:indeterminate > .bar{
+    -fx-background-color: #c4d6fe;
+    -fx-padding: 1.5;
+}
+
+.progress-bar > .secondary-bar,
+.progress-bar:indeterminate > .secondary-bar{
+    -fx-background-color: #c4d6fe;
+}
+
+.progress-bar > .track,
+.progress-bar > .bar {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
 }
