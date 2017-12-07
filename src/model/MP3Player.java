@@ -23,6 +23,7 @@ public class MP3Player extends Observable {
         public void run() {
 
             while (!isInterrupted()) {
+
                 fft.forward(audioPlayer.getMix());
                 for (int i = 0; i < fft.specSize(); i += steps) {
                     if(slowShrink) {
@@ -37,6 +38,8 @@ public class MP3Player extends Observable {
                 }
                 setChanged();
                 notifyObservers(bands);
+                setChanged();
+                notifyObservers(audioPlayer.position() * 1.0 / audioPlayer.length());
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
@@ -67,6 +70,13 @@ public class MP3Player extends Observable {
             this.steps = 1;
         } else {
             this.steps = steps;
+        }
+    }
+
+    public void setPosition(double percent) {
+        if(audioPlayer != null) {
+            int pos = (int) (audioPlayer.length() * percent);
+            audioPlayer.cue(pos);
         }
     }
 }

@@ -6,12 +6,11 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
     <children>
         <BorderPane layoutX="-205.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #292c33;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
-                <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <AnchorPane fx:id="canvasPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <children>
                         <Canvas fx:id="canvas" height="620.0" width="1280.0" />
                     </children>
@@ -27,6 +26,7 @@
                         </Button>
                   <CheckBox fx:id="slowCheckBox" layoutX="1064.0" layoutY="42.0" mnemonicParsing="false" onAction="#setSlowShrink" text="Slow Shrinking" textFill="#a8cde1" />
                   <Slider fx:id="spacingSlider" blockIncrement="4.0" layoutX="770.0" layoutY="44.0" majorTickUnit="4.0" max="16.0" prefHeight="38.0" prefWidth="263.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+                  <Slider fx:id="seekSlider" layoutX="32.0" layoutY="44.0" majorTickUnit="1.0" max="1.0" minorTickCount="1" prefHeight="14.0" prefWidth="690.0" />
                     </children>
                 </AnchorPane>
             </bottom>
