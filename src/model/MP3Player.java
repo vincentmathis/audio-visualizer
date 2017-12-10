@@ -50,15 +50,19 @@ public class MP3Player extends Observable {
     }
 
     public void play(String fileName) {
-        if (audioPlayer != null && thread != null) {
-            thread.interrupt();
-            minim.stop();
-        }
+        stop();
         audioPlayer = minim.loadMP3File(fileName);
         audioPlayer.play();
         fft = new FFT(audioPlayer.bufferSize(), audioPlayer.sampleRate());
         thread = new FFTThread();
         thread.start();
+    }
+
+    public void stop() {
+        if (audioPlayer != null && thread != null) {
+            thread.interrupt();
+            minim.stop();
+        }
     }
 
     public void setSlowShrink(boolean slowShrink) {

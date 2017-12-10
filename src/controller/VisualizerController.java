@@ -1,20 +1,39 @@
-package view;
+package controller;
 
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import model.MP3Player;
+
 import java.util.Observable;
 import java.util.Observer;
 
-public class DrawCanvas implements Observer {
+public class VisualizerController implements Observer {
 
+    private MP3Player player;
+    @FXML
+    private Pane centerPane;
+    @FXML
     private Canvas canvas;
     private GraphicsContext gc;
 
-    public DrawCanvas(Canvas canvas) {
-        this.canvas = canvas;
+
+    public void initPlayer(MP3Player player) {
+        if (this.player != null) {
+            throw new IllegalStateException("Model can only be initialized once");
+        }
+        this.player = player;
+        this.player.addObserver(this);
+    }
+
+    @FXML
+    public void initialize() {
         this.gc = canvas.getGraphicsContext2D();
+        canvas.widthProperty().bind(centerPane.widthProperty());
+        canvas.heightProperty().bind(centerPane.heightProperty());
     }
 
     private void drawShapes(float bands[]) {
