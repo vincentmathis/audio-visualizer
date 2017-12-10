@@ -11,6 +11,14 @@ yellow:         #e3c18a
 blue:           #3973ee
 */
 
+.center-pane {
+    -fx-background-color: #292c33
+}
+
+.bottom-pane {
+    -fx-background-color: #22252b
+}
+
 .button {
     -fx-background-color: transparent;
     -fx-text-fill: #93a1bb;
@@ -22,14 +30,6 @@ blue:           #3973ee
 .button:hover {
     -fx-text-fill: #c4d6fe;
     -fx-border-color:  #c4d6fe;
-}
-
-.border-pane {
-    -fx-background-color: #292c33
-}
-
-.bottom-pane {
-    -fx-background-color: #22252b
 }
 
 .slider {

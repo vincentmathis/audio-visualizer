@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
-<Pane fx:id="centerPane" xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controller.VisualizerController" BorderPane.alignment="CENTER">
-    <Canvas fx:id="canvas" height="620.0" width="1280.0"/>
-</Pane>
 
+<Pane fx:id="centerPane" styleClass="center-pane" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VisualizerController">
+   <children>
+       <Canvas fx:id="canvas" height="620.0" width="1280.0" />
+   </children>
+</Pane>

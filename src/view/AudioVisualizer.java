@@ -44,7 +44,6 @@ public class AudioVisualizer extends Application {
     }
 
 
-    // TODO player is null but minim keeps running after closing
     @Override
     public void stop() throws Exception {
         player.stop();

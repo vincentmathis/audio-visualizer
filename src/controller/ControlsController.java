@@ -53,6 +53,7 @@ public class ControlsController implements Observer {
 
     @FXML
     public void initialize() {
+        slowCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> player.setSlowShrink(newValue));
         spacingSlider.valueProperty().addListener((observable, oldValue, newValue) -> player.setSteps(newValue.intValue()));
         progressBar.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -69,10 +70,5 @@ public class ControlsController implements Observer {
         if (arg instanceof Double) {
             progressBar.setProgress((double) arg);
         }
-    }
-
-    @FXML
-    public void setSlowShrink() {
-        player.setSlowShrink(slowCheckBox.isSelected());
     }
 }
