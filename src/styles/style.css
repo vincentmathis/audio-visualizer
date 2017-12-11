@@ -35,7 +35,7 @@ blue:           #3973ee
 
 .slider {
     -jfx-default-thumb: #93a1bb;
-    -jfx-default-track: #CCCCCC;
+    -jfx-default-track: #7d8598;
 }
 
 .slider .track,
@@ -50,6 +50,12 @@ blue:           #3973ee
 .slider .thumb,
 .slider:focused .thumb {
     -fx-background-color: -jfx-default-thumb;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
+}
+.slider .thumb:hover,
+.slider:focused .thumb:hover {
+    -fx-background-color: #c4d6fe;
     -fx-background-radius: 20;
     -fx-background-insets: 0;
 }
