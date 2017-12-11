@@ -22,14 +22,15 @@ blue:           #3973ee
 .button {
     -fx-background-color: transparent;
     -fx-text-fill: #93a1bb;
+    -fx-font-family: Arial, Helvetica, sans-serif;
+    -fx-font-size: 14;
     -fx-border-color:  #93a1bb;
-    -fx-border-width: 2;
-    -fx-border-radius: 4;
+    -fx-border-radius: 3;
 }
 
 .button:hover {
     -fx-text-fill: #c4d6fe;
-    -fx-border-color:  #c4d6fe;
+    -fx-border-color: #c4d6fe;
 }
 
 .slider {
@@ -85,63 +86,50 @@ blue:           #3973ee
     -fx-background-insets: 0;
 }
 
+
 .check-box {
-    -jfx-unchecked-color: #5A5A5A;
-    -jfx-checked-color: #d59a63;
+	-fx-text-fill: #93a1bb;
+    -fx-font-family: Arial, Helvetica, sans-serif;
+    -fx-font-size: 14;
 }
 
-.check-box .box-container {
-    -fx-shape: "M 400 100 L 400 100 A 50 50 0 1 1 400 250 A 50 50 0 1 1 400 100 ";
-    -fx-padding: 10;
+.check-box > .box {
+	-fx-background-radius: 3;
+	-fx-padding:0;
+	-fx-border-color: #93a1bb;
+	-fx-border-radius: 3;
+	-fx-background-color: transparent;
 }
 
-.check-box .box,
-.check-box:indeterminate .box,
-.check-box:indeterminate:selected .box{
-    -fx-pref-width: 18;
-    -fx-pref-height: 18;
-
-    -fx-min-width: -fx-pref-width;
-    -fx-max-width: -fx-pref-width;
-    -fx-min-height: -fx-pref-height;
-    -fx-max-height: -fx-pref-height;
-
-    -fx-background-color: TRANSPARENT;
-    -fx-background-radius: 2;
-
-    -fx-border-color: -jfx-unchecked-color;
-    -fx-border-style: solid;
-    -fx-border-radius: 2;
-    -fx-border-width: 2;
+.check-box > .box:hover {
+	-fx-border-color: #c4d6fe;
 }
 
-.check-box:selected .box {
-    -fx-border-color: -jfx-checked-color;
+.check-box > .box > .mark {
+	-fx-background-color: null;
+	-fx-padding: 0.416667em 0.416667em 0.5em 0.5em; /* 5 5 6 6 */
+	-fx-shape: "M927.936 272.992l-68.288-68.288c-12.608-12.576-32.96-12.576-45.536 0l-409.44 409.44-194.752-196.16c-12.576-12.576-32.928-12.576-45.536 0l-68.288 68.288c-12.576 12.608-12.576 32.96 0 45.536l285.568 287.488c12.576 12.576 32.96 12.576 45.536 0l500.736-500.768c12.576-12.544 12.576-32.96 0-45.536z";
+	-fx-background-insets: -3 -3 1 0;
 }
-
-.check-box .mark {
-    -fx-shape: "M384 690l452-452 60 60-512 512-238-238 60-60z";
-    -fx-max-width: 15;
-    -fx-max-height: 12;
-
-    -fx-background-color: WHITE;
-
-    -fx-border-color: WHITE;
-    -fx-border-width: 2;
-    -fx-border-radius: 2;
+.check-box {
+	-fx-label-padding: 0.2em 0.0em 0.3em 0.416667em; /* 0 0 0 5 */
+	-fx-padding: 0 0 2 0;
 }
-
-.check-box .indeterminate-mark{
-    -fx-background-color: -jfx-checked-color;
-    -fx-background-radius: 2;
-    -fx-border-width: 0;
-    -fx-max-width: 10;
-    -fx-max-height: 10;
+.check-box:indeterminate > .box {
+	-fx-padding: 0;
+}
+.check-box:selected > .box > .mark {
+	-fx-background-color: linear-gradient(to bottom, #93a1bb, #c4d6fe);
 }
 
 
 .progress-bar > .track{
     -fx-background-color: #7d8598;
+}
+
+.progress-bar:hover{
+    -fx-border-radius: 3;
+    -fx-border-color: #c4d6fe;
 }
 
 .progress-bar > .bar,
@@ -157,6 +145,6 @@ blue:           #3973ee
 
 .progress-bar > .track,
 .progress-bar > .bar {
-    -fx-background-radius: 0;
+    -fx-background-radius: 3;
     -fx-background-insets: 0;
 }
