@@ -41,9 +41,8 @@ public class VisualizerController implements Observer {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
             double scale = height / 100;
-            // TODO doesn't clear after using step slider
             gc.clearRect(0, 0, width, height);
-            gc.setFill(Color.web("#d59a63"));
+            gc.setFill(Color.web("#b37ccf"));
             double barWidth = width / bands.length;
             for (int i = 0; i < bands.length; i++) {
                 gc.fillRect(i * barWidth, height / 2 - bands[i] * scale, barWidth, bands[i] * scale * 2);
