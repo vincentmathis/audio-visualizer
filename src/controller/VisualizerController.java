@@ -43,9 +43,12 @@ public class VisualizerController implements Observer {
             double scale = height / 100;
             gc.clearRect(0, 0, width, height);
             gc.setFill(Color.web("#b37ccf"));
-            double barWidth = width / bands.length;
+            double a = 360.0 / bands.length;
             for (int i = 0; i < bands.length; i++) {
-                gc.fillRect(i * barWidth, height / 2 - bands[i] * scale, barWidth, bands[i] * scale * 2);
+                double xCoords[] = {width / 2 + Math.cos(Math.toRadians(i * a)) * 100, width / 2 + Math.cos(Math.toRadians((i + 1) * a)) * 100, width / 2 + Math.cos(Math.toRadians(i * a)) * 100 + bands[i], width / 2 + Math.cos(Math.toRadians((i + 1) * a)) * 100 + bands[i]};
+                double yCoords[] = {height/2 - Math.sin(Math.toRadians(i * a)) * 100, height/2 - Math.sin(Math.toRadians((i + 1) * a)) * 100, height/2 - Math.sin(Math.toRadians(i * a)) * 100 + bands[i], height/2 - Math.sin(Math.toRadians((i + 1) * a)) *100 + bands[i]};
+
+                gc.fillPolygon(xCoords, yCoords, 4);
             }
         });
 
