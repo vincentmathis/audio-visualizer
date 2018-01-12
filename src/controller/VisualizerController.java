@@ -43,11 +43,27 @@ public class VisualizerController implements Observer {
             double scale = height / 100;
             gc.clearRect(0, 0, width, height);
             gc.setFill(Color.web("#b37ccf"));
-            double a = 360.0 / bands.length;
-            for (int i = 0; i < bands.length; i++) {
-                double xCoords[] = {width / 2 + Math.cos(Math.toRadians(i * a)) * 100, width / 2 + Math.cos(Math.toRadians((i + 1) * a)) * 100, width / 2 + Math.cos(Math.toRadians(i * a)) * 100 + bands[i], width / 2 + Math.cos(Math.toRadians((i + 1) * a)) * 100 + bands[i]};
-                double yCoords[] = {height/2 - Math.sin(Math.toRadians(i * a)) * 100, height/2 - Math.sin(Math.toRadians((i + 1) * a)) * 100, height/2 - Math.sin(Math.toRadians(i * a)) * 100 + bands[i], height/2 - Math.sin(Math.toRadians((i + 1) * a)) *100 + bands[i]};
+            double a = 360.0 / (bands.length / 4);
+            for (int i = 0; i < bands.length - 4; i += 4) {
+                double avg = (bands[i] + bands[i + 1] + bands[i + 2] + bands[i + 3]) / 4;
+                if(avg < 1.0) continue;
+                double xCenter = width / 2;
+                double yCenter = height / 2;
+                double xDist1 = Math.sin(Math.toRadians(i * a));
+                double xDist2 = Math.sin(Math.toRadians((i + 4) * a));
+                double yDist1 = Math.cos(Math.toRadians(i * a));
+                double yDist2 = Math.cos(Math.toRadians((i + 4) * a));
+                double x1 = xCenter + xDist1 * 100;
+                double x2 = xCenter + xDist2 * 100;
+                double x3 = xCenter + xDist2 * 100 * avg;
+                double x4 = xCenter + xDist1 * 100 * avg;
+                double y1 = yCenter - yDist1 * 100;
+                double y2 = yCenter - yDist2 * 100;
+                double y3 = yCenter - yDist2 * 100 * avg;
+                double y4 = yCenter - yDist1 * 100 * avg;
 
+                double xCoords[] = {x1, x2, x3, x4};
+                double yCoords[] = {y1, y2, y3, y4};
                 gc.fillPolygon(xCoords, yCoords, 4);
             }
         });
