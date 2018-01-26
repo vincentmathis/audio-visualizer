@@ -34,6 +34,7 @@ public class AudioVisualizer extends Application {
         player = new MP3Player();
         visualizerController.initPlayer(player);
         controlsController.initPlayer(player);
+        controlsController.initVisualizer(visualizerController);
 
         root.getStylesheets().add("styles/style.css");
         stage.setMinWidth(640);

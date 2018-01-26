@@ -154,3 +154,34 @@ blue:           #3973ee
     -fx-background-radius: 3;
     -fx-background-insets: 0;
 }
+
+.radio-button {
+	-fx-label-padding: 0.0em 0.0em 0.1em 0.416667em; /* 0 0 0 5 */
+	-fx-text-fill: #93a1bb;
+    -fx-font-family: Arial, Helvetica, sans-serif;
+                          -fx-font-size: 14;
+	-fx-padding: 0 0 .5 0;
+}
+.radio-button > .radio,
+.radio-button:focused > .radio  {
+	-fx-border-color: #93a1bb;
+	-fx-border-radius: 1em;
+	-fx-background-radius: 1.0em; /* large value to make sure this remains circular */
+	-fx-padding: 1 2 3 2;
+	-fx-background-color: transparent;
+}
+.radio-button > .radio > .dot {
+	-fx-background-color: transparent;
+	-fx-background-radius: 1.0em; /* large value to make sure this remains circular */
+	-fx-padding: 0.333333em; /* 4 -- radius of the inner black dot when selected */
+	-fx-background-insets: 3 2 1 2;
+}
+.radio-button:selected > .radio,.radio-button:hover > .radio {
+	-fx-fill-color: #93a1bb;
+}
+.radio-button:pressed > .radio {
+	-fx-background-color: #93a1bb;
+}
+.radio-button:selected > .radio > .dot {
+	-fx-background-color: #93a1bb;
+}

@@ -5,12 +5,10 @@ import java.util.Observable;
 
 public class MP3Player extends Observable {
 
-    private int steps = 1;
     private final SimpleMinimWithMix minim;
     private SimpleAudioPlayerWithMix audioPlayer;
     private Thread thread;
     private FFT fft;
-    private boolean slowShrink = false;
 
     public MP3Player() {
         minim = new SimpleMinimWithMix(true);
@@ -25,16 +23,8 @@ public class MP3Player extends Observable {
             while (!isInterrupted()) {
 
                 fft.forward(audioPlayer.getMix());
-                for (int i = 0; i < fft.specSize(); i += steps) {
-                    if(slowShrink) {
-                        if(fft.getBand(i) > bands[i]) {
-                            bands[i] = fft.getBand(i);
-                        } else {
-                            bands[i] -= 2;
-                        }
-                    } else {
-                        bands[i] = fft.getBand(i);
-                    }
+                for (int i = 0; i < fft.specSize(); i++) {
+                    bands[i] = fft.getBand(i);
                 }
                 setChanged();
                 notifyObservers(bands);
@@ -63,14 +53,6 @@ public class MP3Player extends Observable {
             thread.interrupt();
             minim.stop();
         }
-    }
-
-    public void setSlowShrink(boolean slowShrink) {
-        this.slowShrink = slowShrink;
-    }
-
-    public void setSteps(int steps) {
-        this.steps = steps;
     }
 
     public void setPosition(double percent) {

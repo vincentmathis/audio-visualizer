@@ -2,9 +2,7 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -16,6 +14,7 @@ import java.util.Observer;
 public class ControlsController implements Observer {
 
     private MP3Player player;
+    private VisualizerController vc;
     private File lastFile;
 
     @FXML
@@ -23,9 +22,13 @@ public class ControlsController implements Observer {
     @FXML
     private ProgressBar progressBar;
     @FXML
-    private Slider spacingSlider;
+    private RadioButton radioCircle;
     @FXML
-    private CheckBox slowCheckBox;
+    private RadioButton radioStraight;
+    @FXML
+    private RadioButton radioBars;
+    @FXML
+    private RadioButton radioLine;
 
     public void initPlayer(MP3Player player) {
         if (this.player != null) {
@@ -33,6 +36,13 @@ public class ControlsController implements Observer {
         }
         this.player = player;
         this.player.addObserver(this);
+    }
+
+    public void initVisualizer(VisualizerController vc) {
+        if (this.vc != null) {
+            throw new IllegalStateException("Model can only be initialized once");
+        }
+        this.vc = vc;
     }
 
     @FXML
@@ -53,8 +63,12 @@ public class ControlsController implements Observer {
 
     @FXML
     public void initialize() {
-        slowCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> player.setSlowShrink(newValue));
-        spacingSlider.valueProperty().addListener((observable, oldValue, newValue) -> player.setSteps(newValue.intValue()));
+
+        radioCircle.selectedProperty().addListener(((observable, oldValue, newValue) -> vc.setCircle(newValue)));
+        radioStraight.selectedProperty().addListener(((observable, oldValue, newValue) -> vc.setStraight(newValue)));
+        radioBars.selectedProperty().addListener(((observable, oldValue, newValue) -> vc.setBars(newValue)));
+        radioLine.selectedProperty().addListener(((observable, oldValue, newValue) -> vc.setLine(newValue)));
+
         progressBar.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 Bounds bounds = progressBar.getLayoutBounds();
