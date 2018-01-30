@@ -39,7 +39,11 @@ public class VisualizerController implements Observer {
         this.gc = canvas.getGraphicsContext2D();
         canvas.widthProperty().bind(centerPane.widthProperty());
         canvas.heightProperty().bind(centerPane.heightProperty());
+        gc.setStroke(Color.web("#d59a63"));
+        gc.setFill(Color.web("#d59a63"));
+        gc.setLineWidth(2);
     }
+
 
     private void drawCircleBars(float bands[]) {
         Platform.runLater(() -> {
@@ -51,7 +55,6 @@ public class VisualizerController implements Observer {
             double angle = 360.0 / (bands.length / 2);
 
             gc.clearRect(0, 0, width, height);
-            gc.setFill(Color.web("#b37ccf"));
 
             for (int i = 0; i < bands.length - 2; i += 2) {
                 double avg = (bands[i] + bands[i + 1]) / 2;
@@ -91,7 +94,6 @@ public class VisualizerController implements Observer {
             double angle = 360.0 / (bands.length);
 
             gc.clearRect(0, 0, width, height);
-            gc.setStroke(Color.web("#b37ccf"));
 
             double xCoords[] = new double[bands.length];
             double yCoords[] = new double[bands.length];
@@ -117,7 +119,6 @@ public class VisualizerController implements Observer {
             double barWidth = width / bands.length;
 
             gc.clearRect(0, 0, width, height);
-            gc.setFill(Color.web("#b37ccf"));
 
             for (int i = 0; i < bands.length; i++) {
                 double band = Math.log(bands[i] + 1) * scale;
@@ -136,7 +137,6 @@ public class VisualizerController implements Observer {
             double barWidth = width / bands.length;
 
             gc.clearRect(0, 0, width, height);
-            gc.setStroke(Color.web("#b37ccf"));
 
             double xCoords[] = new double[bands.length];
             double yCoords[] = new double[bands.length];

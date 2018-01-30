@@ -1,5 +1,6 @@
 package model;
 
+import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
 import java.util.Observable;
 
@@ -9,6 +10,7 @@ public class MP3Player extends Observable {
     private SimpleAudioPlayerWithMix audioPlayer;
     private Thread thread;
     private FFT fft;
+    private BeatDetect beat;
 
     public MP3Player() {
         minim = new SimpleMinimWithMix(true);
@@ -23,8 +25,14 @@ public class MP3Player extends Observable {
             while (!isInterrupted()) {
 
                 fft.forward(audioPlayer.getMix());
+                beat.detect(audioPlayer.getMix());
                 for (int i = 0; i < fft.specSize(); i++) {
                     bands[i] = fft.getBand(i);
+                }
+
+                // TODO beat detect
+                if(beat.isOnset()) {
+                   
                 }
                 setChanged();
                 notifyObservers(bands);
@@ -44,6 +52,7 @@ public class MP3Player extends Observable {
         audioPlayer = minim.loadMP3File(fileName);
         audioPlayer.play();
         fft = new FFT(audioPlayer.bufferSize(), audioPlayer.sampleRate());
+        beat = new BeatDetect();
         thread = new FFTThread();
         thread.start();
     }
