@@ -3,59 +3,45 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane fx:id="bottomPane" hgap="32.0" styleClass="bottom-pane" BorderPane.alignment="CENTER"
-          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="controller.ControlsController">
+<GridPane fx:id="bottomPane" hgap="32.0" styleClass="bottom-pane" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControlsController">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES"/>
+        <ColumnConstraints hgrow="SOMETIMES" />
 
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="175.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="60.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="60.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <padding>
-        <Insets bottom="32.0" left="32.0" right="32.0" top="32.0"/>
+        <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
     </padding>
     <children>
-        <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" prefHeight="16.0" progress="0.0"
-                     GridPane.hgrow="ALWAYS"/>
+        <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" prefHeight="16.0" progress="0.0" GridPane.hgrow="ALWAYS" />
 
         <Button alignment="CENTER" mnemonicParsing="false" onAction="#openFile" text="Open" GridPane.columnIndex="2">
 
         </Button>
         <GridPane hgap="20.0" vgap="20.0" GridPane.columnIndex="1">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <RadioButton fx:id="radioCircle" mnemonicParsing="false" selected="true" text="Circle">
-                    <GridPane.margin>
-                        <Insets/>
-                    </GridPane.margin>
-                    <toggleGroup>
-                        <ToggleGroup fx:id="toggleStyle1"/>
-                    </toggleGroup>
-                </RadioButton>
-                <RadioButton fx:id="radioBars" mnemonicParsing="false" selected="true" text="Bars"
-                             GridPane.rowIndex="1">
-                    <toggleGroup>
-                        <ToggleGroup fx:id="toggleStyle2"/>
-                    </toggleGroup>
-                </RadioButton>
-                <RadioButton fx:id="radioStraight" mnemonicParsing="false" text="Straight" toggleGroup="$toggleStyle1"
-                             GridPane.columnIndex="1"/>
-                <RadioButton fx:id="radioLine" mnemonicParsing="false" text="Line" toggleGroup="$toggleStyle2"
-                             GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Slider fx:id="circleToggle" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" snapToTicks="true" GridPane.columnIndex="1" />
+                <Slider fx:id="barsToggle" blockIncrement="1.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="Straight" GridPane.columnIndex="2" />
+                <Label text="Circle" GridPane.halignment="RIGHT" />
+                <Label text="Bars" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                <Label text="Line" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             </children>
             <GridPane.margin>
-                <Insets/>
+                <Insets />
             </GridPane.margin>
         </GridPane>
     </children>

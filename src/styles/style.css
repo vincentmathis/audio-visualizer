@@ -19,6 +19,12 @@ blue:           #3973ee
     -fx-background-color: #22252b
 }
 
+.label {
+    -fx-text-fill: #93a1bb;
+    -fx-font-family: Arial, Helvetica, sans-serif;
+    -fx-font-size: 14;
+}
+
 .button {
     -fx-background-color: transparent;
     -fx-text-fill: #93a1bb;
@@ -34,17 +40,17 @@ blue:           #3973ee
 }
 
 .slider {
-    -jfx-default-thumb: #93a1bb;
+    -jfx-default-thumb: #c4d6fe;
     -jfx-default-track: #7d8598;
 }
 
 .slider .track,
 .slider:vertical .track {
     -fx-background-color: -jfx-default-track;
-    -fx-background-radius: 5;
+    -fx-background-radius: 11;
     -fx-background-insets: 0;
-    -fx-pref-width: 2px;
-    -fx-pref-height: 2px;
+    -fx-pref-width: 10px;
+    -fx-pref-height: 22px;
 }
 
 .slider .thumb,

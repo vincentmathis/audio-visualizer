@@ -63,9 +63,9 @@ public class VisualizerController implements Observer {
                 double xCenter = width / 2;
                 double yCenter = height / 2;
                 double xDist1 = Math.sin(Math.toRadians(i * angle));
-                double xDist2 = Math.sin(Math.toRadians((i + 2) * angle - angle/2));
+                double xDist2 = Math.sin(Math.toRadians((i + 2) * angle - angle / 2));
                 double yDist1 = Math.cos(Math.toRadians(i * angle));
-                double yDist2 = Math.cos(Math.toRadians((i + 2) * angle - angle/2));
+                double yDist2 = Math.cos(Math.toRadians((i + 2) * angle - angle / 2));
                 double x1 = xCenter + xDist1 * radius;
                 double x2 = xCenter + xDist2 * radius;
                 double x3 = xCenter + xDist2 * (radius + band);
@@ -132,7 +132,7 @@ public class VisualizerController implements Observer {
             for (int i = 0; i < bands.length - 1; i += 2) {
                 double band = Math.log(bands[i] + 1) * scale;
                 gc.setFill(Color.hsb(i * angle, saturation, brightness));
-                gc.fillRect(barWidth * i, yCenter - band, barWidth, band);
+                gc.fillRect(barWidth * i, yCenter - band, barWidth, band * 2);
             }
         });
     }
@@ -163,17 +163,20 @@ public class VisualizerController implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-        if(saturation > 0.5) {
+        if (saturation > 0.5) {
             saturation -= 0.02;
         }
-        if(brightness > 0.8) {
+        if (brightness > 0.8) {
             brightness -= 0.02;
         }
         if (o instanceof float[]) {
-            if (circle && bars) drawCircleBars((float[]) o);
-            else if (circle && line) drawCircleLine((float[]) o);
-            else if (straight && bars) drawStraightBars((float[]) o);
-            else if (straight && line) drawStraightLine((float[]) o);
+            if (circle) {
+                if (bars) drawCircleBars((float[]) o);
+                else drawCircleLine((float[]) o);
+            } else {
+                if (bars) drawStraightBars((float[]) o);
+                else drawStraightLine((float[]) o);
+            }
         }
         if (o instanceof Boolean) {
             saturation = 1.0;
@@ -185,15 +188,9 @@ public class VisualizerController implements Observer {
         this.circle = circle;
     }
 
-    public void setStraight(boolean straight) {
-        this.straight = straight;
-    }
-
     public void setBars(boolean bars) {
         this.bars = bars;
     }
 
-    public void setLine(boolean line) {
-        this.line = line;
-    }
+
 }

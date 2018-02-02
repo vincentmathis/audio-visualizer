@@ -2,7 +2,8 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
-import javafx.scene.control.*;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -22,13 +23,10 @@ public class ControlsController implements Observer {
     @FXML
     private ProgressBar progressBar;
     @FXML
-    private RadioButton radioCircle;
+    private Slider circleToggle;
     @FXML
-    private RadioButton radioStraight;
-    @FXML
-    private RadioButton radioBars;
-    @FXML
-    private RadioButton radioLine;
+    private Slider barsToggle;
+
 
     public void initPlayer(MP3Player player) {
         if (this.player != null) {
@@ -64,10 +62,8 @@ public class ControlsController implements Observer {
     @FXML
     public void initialize() {
 
-        radioCircle.selectedProperty().addListener(((observable, oldValue, newValue) -> vc.setCircle(newValue)));
-        radioStraight.selectedProperty().addListener(((observable, oldValue, newValue) -> vc.setStraight(newValue)));
-        radioBars.selectedProperty().addListener(((observable, oldValue, newValue) -> vc.setBars(newValue)));
-        radioLine.selectedProperty().addListener(((observable, oldValue, newValue) -> vc.setLine(newValue)));
+        circleToggle.valueProperty().addListener(((observable, oldValue, newValue) -> vc.setCircle(newValue.intValue() == 0)));
+        barsToggle.valueProperty().addListener(((observable, oldValue, newValue) -> vc.setBars(newValue.intValue() == 0)));
 
         progressBar.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {

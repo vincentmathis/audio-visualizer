@@ -9,6 +9,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.MP3Player;
 
+/**
+ * Audio Visualizer using JavaFX and Minim.
+ *
+ * @author Vincent Mathis
+ * @author Dominika Hraskova
+ */
 
 public class AudioVisualizer extends Application {
 
