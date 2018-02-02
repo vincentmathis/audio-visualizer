@@ -18,8 +18,8 @@ public class VisualizerController implements Observer {
     private boolean bars = true;
     private boolean line;
 
-    private double BRIGHTNESS = 0.8;
-    private double SATURATION = 0.5;
+    private double brightness = 0.8;
+    private double saturation = 0.5;
 
     private MP3Player player;
     @FXML
@@ -79,7 +79,7 @@ public class VisualizerController implements Observer {
                 double xCoords[] = {x1, x2, x3, x4};
                 double yCoords[] = {y1, y2, y3, y4};
 
-                gc.setFill(Color.hsb(i * angle, SATURATION, BRIGHTNESS));
+                gc.setFill(Color.hsb(i * angle, saturation, brightness));
                 gc.fillPolygon(xCoords, yCoords, 4);
             }
         });
@@ -98,7 +98,7 @@ public class VisualizerController implements Observer {
             double angle = 360.0 / bands.length;
 
             gc.clearRect(0, 0, width, height);
-
+            gc.setLineWidth(scale / 5);
 
             for (int i = 0; i < bands.length; i++) {
                 double band1 = Math.log(bands[i] + 1) * scale;
@@ -112,7 +112,7 @@ public class VisualizerController implements Observer {
                 double yCoord1 = yCenter - yDist1 * (radius + band1);
                 double yCoord2 = yCenter - yDist2 * (radius + band2);
 
-                gc.setStroke(Color.hsb(i * angle, SATURATION, BRIGHTNESS));
+                gc.setStroke(Color.hsb(i * angle, saturation, brightness));
                 gc.strokeLine(xCoord1, yCoord1, xCoord2, yCoord2);
             }
         });
@@ -132,7 +132,7 @@ public class VisualizerController implements Observer {
 
             for (int i = 0; i < bands.length - 2; i += 2) {
                 double band = Math.log(bands[i] + 1) * scale;
-                gc.setFill(Color.hsb(i * angle, SATURATION, BRIGHTNESS));
+                gc.setFill(Color.hsb(i * angle, saturation, brightness));
                 gc.fillRect(barWidth * i, yCenter - band, barWidth, band);
             }
         });
@@ -149,12 +149,13 @@ public class VisualizerController implements Observer {
             double angle = 360.0 / bands.length;
 
             gc.clearRect(0, 0, width, height);
+            gc.setLineWidth(scale / 10);
 
             for (int i = 0; i < bands.length - 1; i++) {
                 double band1 = Math.log(bands[i] + 1) * scale;
                 double band2 = Math.log(bands[i + 1] + 1) * scale;
 
-                gc.setStroke(Color.hsb(i * angle, SATURATION, BRIGHTNESS));
+                gc.setStroke(Color.hsb(i * angle, saturation, brightness));
                 gc.strokeLine(barWidth * i, yCenter - band1, barWidth * (i + 1), yCenter - band2);
             }
         });
@@ -163,8 +164,11 @@ public class VisualizerController implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-        if(SATURATION > 0.5) {
-            SATURATION -= 0.02;
+        if(saturation > 0.5) {
+            saturation -= 0.02;
+        }
+        if(brightness > 0.8) {
+            brightness -= 0.02;
         }
         if (o instanceof float[]) {
             if (circle && bars) drawCircleBars((float[]) o);
@@ -173,7 +177,8 @@ public class VisualizerController implements Observer {
             else if (straight && line) drawStraightLine((float[]) o);
         }
         if (o instanceof Boolean) {
-            SATURATION = 1.0;
+            saturation = 1.0;
+            brightness = 1.0;
         }
     }
 
