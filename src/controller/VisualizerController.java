@@ -53,14 +53,13 @@ public class VisualizerController implements Observer {
             double minBounds = width < height ? width : height;
             int radius = (int) (minBounds / 4);
             double scale = minBounds / 30;
-            double angle = 360.0 / (bands.length / 2);
+            double angle = 360.0 / (bands.length - 1);
 
             gc.clearRect(0, 0, width, height);
 
 
-            for (int i = 0; i < bands.length - 2; i += 2) {
-                double avg = (bands[i] + bands[i + 1]) / 2;
-                avg = Math.log(avg + 1) * scale;
+            for (int i = 0; i < bands.length - 1; i += 2) {
+                double band = Math.log(bands[i] + 1) * scale;
                 double xCenter = width / 2;
                 double yCenter = height / 2;
                 double xDist1 = Math.sin(Math.toRadians(i * angle));
@@ -69,12 +68,12 @@ public class VisualizerController implements Observer {
                 double yDist2 = Math.cos(Math.toRadians((i + 2) * angle - angle/2));
                 double x1 = xCenter + xDist1 * radius;
                 double x2 = xCenter + xDist2 * radius;
-                double x3 = xCenter + xDist2 * (radius + avg);
-                double x4 = xCenter + xDist1 * (radius + avg);
+                double x3 = xCenter + xDist2 * (radius + band);
+                double x4 = xCenter + xDist1 * (radius + band);
                 double y1 = yCenter - yDist1 * radius;
                 double y2 = yCenter - yDist2 * radius;
-                double y3 = yCenter - yDist2 * (radius + avg);
-                double y4 = yCenter - yDist1 * (radius + avg);
+                double y3 = yCenter - yDist2 * (radius + band);
+                double y4 = yCenter - yDist1 * (radius + band);
 
                 double xCoords[] = {x1, x2, x3, x4};
                 double yCoords[] = {y1, y2, y3, y4};
@@ -94,11 +93,11 @@ public class VisualizerController implements Observer {
             double yCenter = height / 2;
             double minBounds = width < height ? width : height;
             int radius = (int) (minBounds / 4);
-            double scale = minBounds / 50;
+            double scale = minBounds / 30;
             double angle = 360.0 / bands.length;
 
             gc.clearRect(0, 0, width, height);
-            gc.setLineWidth(scale / 5);
+            gc.setLineWidth(scale / 10);
 
             for (int i = 0; i < bands.length; i++) {
                 double band1 = Math.log(bands[i] + 1) * scale;
@@ -125,12 +124,12 @@ public class VisualizerController implements Observer {
             double yCenter = height / 2;
             double minBounds = width < height ? width : height;
             double scale = minBounds / 30;
-            double barWidth = width / bands.length;
-            double angle = 360.0 / bands.length;
+            double barWidth = width / (bands.length - 1);
+            double angle = 360.0 / (bands.length - 1);
 
             gc.clearRect(0, 0, width, height);
 
-            for (int i = 0; i < bands.length - 2; i += 2) {
+            for (int i = 0; i < bands.length - 1; i += 2) {
                 double band = Math.log(bands[i] + 1) * scale;
                 gc.setFill(Color.hsb(i * angle, saturation, brightness));
                 gc.fillRect(barWidth * i, yCenter - band, barWidth, band);
@@ -145,8 +144,8 @@ public class VisualizerController implements Observer {
             double yCenter = height / 2;
             double minBounds = width < height ? width : height;
             double scale = minBounds / 30;
-            double barWidth = width / bands.length;
-            double angle = 360.0 / bands.length;
+            double barWidth = width / (bands.length - 1);
+            double angle = 360.0 / (bands.length - 1);
 
             gc.clearRect(0, 0, width, height);
             gc.setLineWidth(scale / 10);

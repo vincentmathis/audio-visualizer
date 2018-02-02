@@ -17,7 +17,8 @@ public class MP3Player extends Observable {
     }
 
     private class FFTThread extends Thread {
-        float bands[] = new float[fft.specSize()];
+        int buffSize = fft.specSize() - fft.specSize() / 2;
+        float bands[] = new float[buffSize];
 
         @Override
         public void run() {
@@ -26,7 +27,7 @@ public class MP3Player extends Observable {
 
                 fft.forward(audioPlayer.getMix());
                 beat.detect(audioPlayer.getMix());
-                for (int i = 0; i < fft.specSize(); i++) {
+                for (int i = 0; i < buffSize; i++) {
                     bands[i] = fft.getBand(i);
                 }
 
