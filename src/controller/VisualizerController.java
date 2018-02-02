@@ -18,6 +18,9 @@ public class VisualizerController implements Observer {
     private boolean bars = true;
     private boolean line;
 
+    private double BRIGHTNESS = 0.8;
+    private double SATURATION = 0.5;
+
     private MP3Player player;
     @FXML
     private Pane centerPane;
@@ -39,8 +42,6 @@ public class VisualizerController implements Observer {
         this.gc = canvas.getGraphicsContext2D();
         canvas.widthProperty().bind(centerPane.widthProperty());
         canvas.heightProperty().bind(centerPane.heightProperty());
-        gc.setStroke(Color.web("#d59a63"));
-        gc.setFill(Color.web("#d59a63"));
         gc.setLineWidth(2);
     }
 
@@ -51,10 +52,11 @@ public class VisualizerController implements Observer {
             double height = canvas.getHeight();
             double minBounds = width < height ? width : height;
             int radius = (int) (minBounds / 4);
-            double scale = minBounds / 50;
+            double scale = minBounds / 30;
             double angle = 360.0 / (bands.length / 2);
 
             gc.clearRect(0, 0, width, height);
+
 
             for (int i = 0; i < bands.length - 2; i += 2) {
                 double avg = (bands[i] + bands[i + 1]) / 2;
@@ -62,9 +64,9 @@ public class VisualizerController implements Observer {
                 double xCenter = width / 2;
                 double yCenter = height / 2;
                 double xDist1 = Math.sin(Math.toRadians(i * angle));
-                double xDist2 = Math.sin(Math.toRadians((i + 2) * angle));
+                double xDist2 = Math.sin(Math.toRadians((i + 2) * angle - angle/2));
                 double yDist1 = Math.cos(Math.toRadians(i * angle));
-                double yDist2 = Math.cos(Math.toRadians((i + 2) * angle));
+                double yDist2 = Math.cos(Math.toRadians((i + 2) * angle - angle/2));
                 double x1 = xCenter + xDist1 * radius;
                 double x2 = xCenter + xDist2 * radius;
                 double x3 = xCenter + xDist2 * (radius + avg);
@@ -76,6 +78,8 @@ public class VisualizerController implements Observer {
 
                 double xCoords[] = {x1, x2, x3, x4};
                 double yCoords[] = {y1, y2, y3, y4};
+
+                gc.setFill(Color.hsb(i * angle, SATURATION, BRIGHTNESS));
                 gc.fillPolygon(xCoords, yCoords, 4);
             }
         });
@@ -91,21 +95,26 @@ public class VisualizerController implements Observer {
             double minBounds = width < height ? width : height;
             int radius = (int) (minBounds / 4);
             double scale = minBounds / 50;
-            double angle = 360.0 / (bands.length);
+            double angle = 360.0 / bands.length;
 
             gc.clearRect(0, 0, width, height);
 
-            double xCoords[] = new double[bands.length];
-            double yCoords[] = new double[bands.length];
 
             for (int i = 0; i < bands.length; i++) {
-                double band = Math.log(bands[i] + 1) * scale;
-                double xDist = Math.sin(Math.toRadians(i * angle));
-                double yDist = Math.cos(Math.toRadians(i * angle));
-                xCoords[i] = xCenter + xDist * (radius + band);
-                yCoords[i] = yCenter - yDist * (radius + band);
+                double band1 = Math.log(bands[i] + 1) * scale;
+                double band2 = Math.log(bands[(i + 1) % bands.length] + 1) * scale;
+                double xDist1 = Math.sin(Math.toRadians(i * angle));
+                double yDist1 = Math.cos(Math.toRadians(i * angle));
+                double xDist2 = Math.sin(Math.toRadians(((i + 1) % bands.length) * angle));
+                double yDist2 = Math.cos(Math.toRadians(((i + 1) % bands.length) * angle));
+                double xCoord1 = xCenter + xDist1 * (radius + band1);
+                double xCoord2 = xCenter + xDist2 * (radius + band2);
+                double yCoord1 = yCenter - yDist1 * (radius + band1);
+                double yCoord2 = yCenter - yDist2 * (radius + band2);
+
+                gc.setStroke(Color.hsb(i * angle, SATURATION, BRIGHTNESS));
+                gc.strokeLine(xCoord1, yCoord1, xCoord2, yCoord2);
             }
-            gc.strokePolygon(xCoords, yCoords, bands.length);
         });
     }
 
@@ -115,13 +124,15 @@ public class VisualizerController implements Observer {
             double height = canvas.getHeight();
             double yCenter = height / 2;
             double minBounds = width < height ? width : height;
-            double scale = minBounds / 50;
+            double scale = minBounds / 30;
             double barWidth = width / bands.length;
+            double angle = 360.0 / bands.length;
 
             gc.clearRect(0, 0, width, height);
 
-            for (int i = 0; i < bands.length; i++) {
+            for (int i = 0; i < bands.length - 2; i += 2) {
                 double band = Math.log(bands[i] + 1) * scale;
+                gc.setFill(Color.hsb(i * angle, SATURATION, BRIGHTNESS));
                 gc.fillRect(barWidth * i, yCenter - band, barWidth, band);
             }
         });
@@ -133,31 +144,36 @@ public class VisualizerController implements Observer {
             double height = canvas.getHeight();
             double yCenter = height / 2;
             double minBounds = width < height ? width : height;
-            double scale = minBounds / 50;
+            double scale = minBounds / 30;
             double barWidth = width / bands.length;
+            double angle = 360.0 / bands.length;
 
             gc.clearRect(0, 0, width, height);
 
-            double xCoords[] = new double[bands.length];
-            double yCoords[] = new double[bands.length];
+            for (int i = 0; i < bands.length - 1; i++) {
+                double band1 = Math.log(bands[i] + 1) * scale;
+                double band2 = Math.log(bands[i + 1] + 1) * scale;
 
-            for (int i = 0; i < bands.length; i++) {
-                double band = Math.log(bands[i] + 1) * scale;
-                xCoords[i] = barWidth * i;
-                yCoords[i] = yCenter - band;
+                gc.setStroke(Color.hsb(i * angle, SATURATION, BRIGHTNESS));
+                gc.strokeLine(barWidth * i, yCenter - band1, barWidth * (i + 1), yCenter - band2);
             }
-            gc.strokePolyline(xCoords, yCoords, bands.length);
         });
     }
 
 
     @Override
     public void update(Observable observable, Object o) {
+        if(SATURATION > 0.5) {
+            SATURATION -= 0.02;
+        }
         if (o instanceof float[]) {
             if (circle && bars) drawCircleBars((float[]) o);
             else if (circle && line) drawCircleLine((float[]) o);
             else if (straight && bars) drawStraightBars((float[]) o);
             else if (straight && line) drawStraightLine((float[]) o);
+        }
+        if (o instanceof Boolean) {
+            SATURATION = 1.0;
         }
     }
 

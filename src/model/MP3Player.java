@@ -30,9 +30,9 @@ public class MP3Player extends Observable {
                     bands[i] = fft.getBand(i);
                 }
 
-                // TODO beat detect
                 if(beat.isOnset()) {
-                   
+                    setChanged();
+                    notifyObservers(true);
                 }
                 setChanged();
                 notifyObservers(bands);
