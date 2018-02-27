@@ -1,15 +1,14 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import model.MP3Player;
 
 import java.io.File;
+import java.util.Observable;
 import java.util.Observer;
 
 public class ControlsController implements Observer {
@@ -50,7 +49,7 @@ public class ControlsController implements Observer {
         if (lastFile != null) {
             fileChooser.setInitialDirectory(new File(lastFile.getParent()));
         }
-        fileChooser.getExtensionFilters().addAll(
+        fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"));
         File selectedFile = fileChooser.showOpenDialog(bottomPane.getScene().getWindow());
         if (selectedFile != null) {
@@ -61,24 +60,13 @@ public class ControlsController implements Observer {
 
     @FXML
     public void initialize() {
-
         circleToggle.valueProperty().addListener(((observable, oldValue, newValue) -> vc.setCircle(newValue.intValue() == 0)));
         barsToggle.valueProperty().addListener(((observable, oldValue, newValue) -> vc.setBars(newValue.intValue() == 0)));
-
-        progressBar.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                Bounds bounds = progressBar.getLayoutBounds();
-                double mouseX = event.getX();
-                double percent = (mouseX) / (bounds.getMaxX() - bounds.getMinX());
-                player.setPosition(percent);
-            }
-        });
+        progressBar.setOnMouseClicked(event -> player.setPosition(event.getX() / progressBar.getWidth()));
     }
 
     @Override
-    public void update(java.util.Observable o, Object arg) {
-        if (arg instanceof Double) {
-            progressBar.setProgress((double) arg);
-        }
+    public void update(Observable o, Object arg) {
+        progressBar.setProgress(player.getProgess());
     }
 }

@@ -11,7 +11,11 @@ public class MP3Player extends Observable {
     private SimpleAudioPlayerWithMix audioPlayer;
     private Thread thread;
     private FFT fft;
-    private BeatDetect beat;
+    private BeatDetect beatDetect;
+
+    private float bands[];
+    private boolean beat = false;
+    private double progess;
 
     public MP3Player() {
         minim = new SimpleMinimWithMix(true);
@@ -21,8 +25,10 @@ public class MP3Player extends Observable {
         stop();
         audioPlayer = minim.loadMP3File(fileName);
         audioPlayer.play();
+
         fft = new FFT(audioPlayer.bufferSize(), audioPlayer.sampleRate());
-        beat = new BeatDetect();
+        bands = new float[fft.specSize() - fft.specSize() / 2];
+        beatDetect = new BeatDetect();
         thread = new FFTThread();
         thread.start();
     }
@@ -42,8 +48,6 @@ public class MP3Player extends Observable {
     }
 
     private class FFTThread extends Thread {
-        int buffSize = fft.specSize() - fft.specSize() / 2;
-        float bands[] = new float[buffSize];
 
         @Override
         public void run() {
@@ -51,19 +55,16 @@ public class MP3Player extends Observable {
             while (!isInterrupted()) {
 
                 fft.forward(audioPlayer.getMix());
-                beat.detect(audioPlayer.getMix());
-                for (int i = 0; i < buffSize; i++) {
-                    bands[i] = fft.getBand(i);
-                }
+                for (int i = 0; i < bands.length; i++) bands[i] = fft.getBand(i);
 
-                if (beat.isOnset()) {
-                    setChanged();
-                    notifyObservers(true);
-                }
+                beatDetect.detect(audioPlayer.getMix());
+                beat = beatDetect.isOnset();
+
+                progess = audioPlayer.position() * 1.0 / audioPlayer.length();
+
                 setChanged();
-                notifyObservers(bands);
-                setChanged();
-                notifyObservers(audioPlayer.position() * 1.0 / audioPlayer.length());
+                notifyObservers();
+
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
@@ -71,5 +72,17 @@ public class MP3Player extends Observable {
                 }
             }
         }
+    }
+
+    public float[] getBands() {
+        return bands;
+    }
+
+    public boolean isBeat() {
+        return beat;
+    }
+
+    public double getProgess() {
+        return progess;
     }
 }

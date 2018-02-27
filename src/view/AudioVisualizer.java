@@ -25,6 +25,11 @@ public class AudioVisualizer extends Application {
     }
 
     @Override
+    public void init() {
+        player = new MP3Player();
+    }
+
+    @Override
     public void start(Stage stage) throws Exception {
         BorderPane root = new BorderPane();
         root.getStyleClass().addAll("border-pane");
@@ -37,7 +42,6 @@ public class AudioVisualizer extends Application {
         root.setBottom(controlsLoader.load());
         ControlsController controlsController = controlsLoader.getController();
 
-        player = new MP3Player();
         visualizerController.initPlayer(player);
         controlsController.initPlayer(player);
         controlsController.initVisualizer(visualizerController);
@@ -52,7 +56,7 @@ public class AudioVisualizer extends Application {
 
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         player.stop();
     }
 }

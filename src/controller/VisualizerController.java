@@ -14,9 +14,7 @@ import java.util.Observer;
 public class VisualizerController implements Observer {
 
     private boolean circle = true;
-    private boolean straight;
     private boolean bars = true;
-    private boolean line;
 
     private double brightness = 0.8;
     private double saturation = 0.5;
@@ -27,6 +25,8 @@ public class VisualizerController implements Observer {
     @FXML
     private Canvas canvas;
     private GraphicsContext gc;
+
+    private float bands[];
 
 
     public void initPlayer(MP3Player player) {
@@ -39,14 +39,13 @@ public class VisualizerController implements Observer {
 
     @FXML
     public void initialize() {
-        this.gc = canvas.getGraphicsContext2D();
+        gc = canvas.getGraphicsContext2D();
         canvas.widthProperty().bind(centerPane.widthProperty());
         canvas.heightProperty().bind(centerPane.heightProperty());
-        gc.setLineWidth(2);
     }
 
 
-    private void drawCircleBars(float bands[]) {
+    private void drawCircleBars() {
         Platform.runLater(() -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
@@ -56,7 +55,6 @@ public class VisualizerController implements Observer {
             double angle = 360.0 / (bands.length - 1);
 
             gc.clearRect(0, 0, width, height);
-
 
             for (int i = 0; i < bands.length - 1; i += 2) {
                 double band = Math.log(bands[i] + 1) * scale;
@@ -85,7 +83,7 @@ public class VisualizerController implements Observer {
 
     }
 
-    private void drawCircleLine(float bands[]) {
+    private void drawCircleLine() {
         Platform.runLater(() -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
@@ -117,7 +115,7 @@ public class VisualizerController implements Observer {
         });
     }
 
-    private void drawStraightBars(float bands[]) {
+    private void drawStraightBars() {
         Platform.runLater(() -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
@@ -137,7 +135,7 @@ public class VisualizerController implements Observer {
         });
     }
 
-    private void drawStraightLine(float bands[]) {
+    private void drawStraightLine() {
         Platform.runLater(() -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
@@ -162,23 +160,21 @@ public class VisualizerController implements Observer {
 
 
     @Override
-    public void update(Observable observable, Object o) {
-        if (saturation > 0.5) {
-            saturation -= 0.02;
+    public void update(Observable o, Object arg) {
+        if (saturation > 0.5) saturation -= 0.02;
+        if (brightness > 0.8) brightness -= 0.02;
+
+        bands = player.getBands();
+
+        if (circle) {
+            if (bars) drawCircleBars();
+            else drawCircleLine();
+        } else {
+            if (bars) drawStraightBars();
+            else drawStraightLine();
         }
-        if (brightness > 0.8) {
-            brightness -= 0.02;
-        }
-        if (o instanceof float[]) {
-            if (circle) {
-                if (bars) drawCircleBars((float[]) o);
-                else drawCircleLine((float[]) o);
-            } else {
-                if (bars) drawStraightBars((float[]) o);
-                else drawStraightLine((float[]) o);
-            }
-        }
-        if (o instanceof Boolean) {
+
+        if (player.isBeat()) {
             saturation = 1.0;
             brightness = 1.0;
         }
